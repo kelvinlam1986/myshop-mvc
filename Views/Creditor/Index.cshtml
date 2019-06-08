@@ -1,0 +1,139 @@
+@model IEnumerable<CreditorDTO>
+
+@{
+    ViewData["Title"] = "Tín dụng | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+            asp-controller="Home" asp-action="Index">Trở về</a>
+            <a class="btn btn-primary" 
+                asp-controller="Creditor" 
+                asp-action="Application">Gửi yêu cầu trở thành người vay tín dụng</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li class="active">Tín dụng</li>
+        </ol>
+    </section>
+}
+
+
+<div class="row">
+     <div class="col-md-6">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success fade in alert-dismissable" id="creditorAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Fail"] != null)
+            {
+                <div class="alert alert-danger fade in alert-dismissable" id="creditorAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Fail"]
+                </div>
+            } 
+        </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Danh sách</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Họ và</th>
+                        <th>Tên</th>
+                        <th>Địa chỉ</th>
+						<th>Số liên hệ #</th>
+                        <th>Cty tín dụng</th>
+                        <th>Ngày cấp</th>
+                        <th>Ghi chú</th>
+						<th>Trạng thái</th>
+                        <th>Hoạt động</th>                      
+                    </tr>
+                    </thead>
+                    <tbody>
+                         @foreach (var creditor in Model) {
+                            <tr>
+                                <td>@creditor.LastName</td>
+                                <td>@creditor.FirstName</td>
+                                <td>@creditor.Address</td>
+                                <td>@creditor.Contact</td>
+                                <td>@creditor.CiName</td>
+                                <td>@creditor.CiDate</td>
+                                <td>@creditor.CiRemarks</td>
+                                <td>@creditor.CreditStatus</td>
+                                <td>
+                                    <a href="account_summary.php?cid=1">
+                                        <i class="glyphicon glyphicon-share-alt text-green"></i></a>
+                                    <a style="color:#fff;" class="small-box-footer"
+                                        asp-controller="Creditor" asp-action="EditCreditInsurance"
+                                        asp-route-id="@creditor.Id">
+                                        <i class="glyphicon glyphicon-edit text-orange"></i>
+                                    </a>
+                                    <a class="small-box-footer"
+                                        asp-controller="Creditor"
+                                        asp-action="ViewApplication"
+                                        asp-route-id="@creditor.Id">
+                                        <i class="glyphicon glyphicon-eye-open text-primary"></i></a>
+                                </td>
+                            </tr>
+                         }
+                     
+                                             
+                    </tbody>
+                        
+                    <tfoot>
+                      <tr>
+                        <th>Họ và</th>
+                        <th>Tên</th>
+                        <th>Địa chỉ</th>
+						<th>Số Liên hệ #</th>
+                        <th>CI Name</th>
+                        <th>CI Date</th>
+                        <th>Ghi chú</th>
+						<th>Trạng thái Ứng dụng</th>
+                        <th>Hoạt động</th>
+                      </tr>					  
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        window.setTimeout(function () {
+            $("#creditorAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+    </script>
+    <script>
+      $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": true,
+          "info": true,
+          "autoWidth": false
+        });
+      });
+    </script>
+}

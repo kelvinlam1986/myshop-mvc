@@ -1,0 +1,202 @@
+@model EditProductDTO
+
+@{
+    ViewData["Title"] = "Sản phẩm | Shop";
+    var suppliers = ViewData["Suppliers"] as IEnumerable<Supplier>;
+    var categories = ViewData["Categories"] as IEnumerable<Category>;
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+                 asp-controller="Product" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li><a asp-controller="Product" asp-action="Index">
+                <i class="fa fa-book"></i> Sản phẩm</a></li>
+            <li class="active">Cập nhật chi tiết sản phẩm</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+     <div class="col-md-6">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success fade in alert-dismissable" id="customerAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Fail"] != null)
+            {
+                <div class="alert alert-danger fade in alert-dismissable" id="customerAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Fail"]
+                </div>
+            } 
+        </div>
+</div>
+
+
+<div class="row">
+ <div class="col-md-12">
+     <div class="box box-primary">
+         <div class="box-header with-border">
+            <h3 class="box-title">Cập nhật chi tiết sản phẩm</h3>
+        </div>
+         <form id="formNewProduct" method="post" asp-controller="Product" 
+            role="form" asp-action="UpdateProduct"
+            enctype="multipart/form-data">
+           <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label" 
+                                asp-for="Serial">Mã sản phẩm</label>
+                            <input class="form-control" asp-for="Serial"
+                                     placeholder="Mã sản phẩm">
+                            <span asp-validation-for="Serial"></span> 
+                            <input type="hidden" class="form-control" asp-for="Id"
+                                        required>  
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label" 
+                                asp-for="Name">Tên sản phẩm</label>
+                            <input class="form-control" asp-for="Name"
+                                     placeholder="Tên sản phẩm">
+                             <span asp-validation-for="Name"></span> 
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="Description" 
+                                class="control-label">Mô tả sản phẩm</label>
+                            <textarea class="form-control" asp-for="Description"
+                                     placeholder="Mô tả sản phẩm"></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="SupplierId" class="control-label">Nhà cung cấp</label>
+                            <select class="form-control select2" 
+                                    asp-for="SupplierId"
+                                    placeholder="Nhà cung cấp">
+                                @foreach (var supplier in suppliers)
+                                {
+                                    <option value="@supplier.Id">@supplier.Name</option>
+                                }
+                            </select>
+                             <span asp-validation-for="SupplierId"></span> 
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Price" 
+                                class="control-label">Giá sản phẩm</label>
+                            <input id="price"
+                                     asp-for="Price"
+                                     class="form-control"
+                                     asp-for="Price"
+                                     placeholder="Giá sản phẩm"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true"  />
+
+                        </div>
+                         <div class="form-group col-md-6">
+                            <label asp-for="CategoryId" 
+                                class="control-label">Danh mục</label>
+                            <select class="form-control select2" 
+                                    asp-for="CategoryId"
+                                     placeholder="Danh mục">
+                                @foreach (var category in categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>    
+                                }
+                            </select>
+                             <span asp-validation-for="CategoryId"></span> 
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Reorder" class="control-label">Sắp xếp</label>
+                            <input id="reorder"
+                                     class="form-control"
+                                     asp-for="Reorder"
+                                     placeholder="Sắp xếp"
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true" />
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Hình</label>
+                            <input id="picture" type="file"
+                                     class="form-control" asp-for="PictureFile"
+                                     placeholder="Hình" />
+                        </div>
+                    </div>
+                </div>
+           </div>
+           <div class="box-footer" align="right">
+                <a class="btn btn-success" 
+                    asp-controller="Product" asp-action="Index">Trở về</a>
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
+     </div>
+ </div>
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        window.setTimeout(function () {
+            $("#customerAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+        $("#price").on("blur", function () {
+            if ($(this).val().trim().length == 0) {
+                $(this).val("0");
+            }
+        });
+        //trigger blur once for the initial setup:
+        $("#price").trigger("blur");
+
+        $("#reorder").on("blur", function () {
+            if ($(this).val().trim().length == 0) {
+                $(this).val("0");
+            }
+        });
+        //trigger blur once for the initial setup:
+        $("#reorder").trigger("blur");
+    </script>
+    <script>
+         $(document).ready(function () {
+            var form = $('#formNewProduct')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function(label, element) {
+
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function(label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+        $(".select2").select2();
+        $("#price").inputmask();
+        $("#reorder").inputmask();
+    </script>
+}

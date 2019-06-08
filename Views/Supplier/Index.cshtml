@@ -1,0 +1,111 @@
+@model IEnumerable<SupplierDTO>
+
+@{
+    ViewData["Title"] = "Nhà cung cấp | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success"
+            asp-controller="Home" asp-action="Index">Trở về</a>
+            <a class="btn btn-primary" asp-controller="Supplier"
+                asp-action="AddNew"
+                 style="color:#fff;" class="small-box-footer">
+                 <i class="glyphicon glyphicon-plus text-blue"></i>
+            </a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li class="active">Nhà cung cấp</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+     <div class="col-md-6">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success fade in alert-dismissable" id="customerAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Fail"] != null)
+            {
+                <div class="alert alert-danger fade in alert-dismissable" id="customerAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Fail"]
+                </div>
+            } 
+        </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Danh sách nhà cung cấp</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                     <thead>
+                      <tr>
+                        <th>Tên nhà cung cấp</th>
+						<th>Địa chỉ</th>
+                        <th>Số liên hệ</th>
+                        <th>Hoạt động</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var supplier in Model)
+                        {
+                            <tr>
+                                <td>@supplier.Name</td>
+                                <td>@supplier.Address</td>
+                                <td>@supplier.Contact</td>
+                                <td>
+                                    <a asp-controller="Supplier"
+                                            asp-action="Edit"
+                                            asp-route-id="@supplier.Id"
+                                        style="color:#fff;" 
+                                        class="small-box-footer">
+                                        <i class="glyphicon glyphicon-edit text-blue"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        window.setTimeout(function () {
+            $("#customerAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+    </script>
+     <script>
+      $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": true,
+          "info": true,
+          "autoWidth": false
+        });
+      });
+    </script>
+}

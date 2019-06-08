@@ -1,0 +1,36 @@
+@model UpdatedSalesQuantityDTO
+@{
+    var customerId = Convert.ToInt32(ViewData["CustomerId"]);
+    var line = ViewData["AddedLine"] as SalesTranLineDTO;
+}
+ 
+ <form method="post" asp-controller="SalesTransaction"
+        asp-action="UpdateLine" 
+        enctype='multipart/form-data'>
+    <div class="modal-content" style="height:auto">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Cập nhật chi tiết bán hàng</h4>
+        </div>
+        <div class="modal-body">
+                <input type="hidden" class="form-control" 
+                    asp-for="@Model.CustomerId" 
+                    value="@customerId" required>  	
+                <input type="hidden" class="form-control" 
+                    id="price" asp-for="@Model.TransTempId" 
+                    value="@line.TransTempId" required>
+                <div class="form-group">
+                    <label class="control-label" for="price">Số lượng</label>
+                    <input type="text" class="form-control" 
+                            id="price" asp-for="@Model.Quantity" 
+                            value="@line.Quantity" required>  
+                </div>  
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+</form>

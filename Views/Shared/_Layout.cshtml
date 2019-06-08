@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewData["Title"]</title>
+   <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="~/plugins/datatables/dataTables.bootstrap.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="~/plugins/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="~/css/AdminLTE.css">
+        <link rel="stylesheet" href="~/plugins/select2/select2.css">
+        <link rel="stylesheet" href="~/css/skins/_all-skins.css">
+        <link rel="stylesheet" href="~/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="~/plugins/iCheck/all.css">
+    </environment>
+    <environment names="Staging,Production">
+       <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+                asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+            <link rel="stylesheet" href="~/plugins/datatables/dataTables.bootstrap.css">
+            <link rel="stylesheet" href="~/css/AdminLTE.css">
+            <link rel="stylesheet" href="~/plugins/select2/select2.min.css">
+            <!-- AdminLTE Skins. Choose a skin from the css/skins
+                folder instead of downloading all of them to reduce the load. -->
+            <link rel="stylesheet" href="~/css/skins/_all-skins.min.css">
+            <link rel="stylesheet" href="~/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+            <link rel="stylesheet" href="~/plugins/iCheck/all.css">
+    </environment>
+</head>
+
+<body class="hold-transition skin-black layout-top-nav">
+    <div class="wrapper">
+        @await Html.PartialAsync("_Header")
+        <!-- Full Width Column -->
+        <div class="content-wrapper">
+            <div class="container">
+                <!-- Content Header (Page header) -->
+                @RenderSection("contentHeader", false)
+                <section class="content">
+                    @RenderBody()
+                </section>
+            </div>
+        </div>
+      </div>
+    <environment names="Development">
+        <script src="~/js/autosum.js"></script>
+        <!-- jQuery 2.1.4 -->
+        <script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+        <script src="~/js/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/plugins/select2/select2.full.js"></script>
+        <!-- SlimScroll -->
+        <script src="~/plugins/slimScroll/jquery.slimscroll.js"></script>
+        <!-- FastClick -->
+        <script src="~/plugins/fastclick/fastclick.js"></script>
+        <script src="~/js/app.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="~/js/demo.js"></script>
+        <script src="~/plugins/datatables/jquery.dataTables.js"></script>
+        <script src="~/plugins/datatables/dataTables.bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+        <script src="~/plugins/iCheck/icheck.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.numeric.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.phone.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.regex.extensions.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/autosum.js"></script>
+           <!-- jQuery 2.1.4 -->
+        <script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+        <script src="~/js/jquery.min.js"></script>
+        <script src="~/plugins/select2/select2.full.min.js"></script>
+        <script src="~/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+          <!-- FastClick -->
+        <script src="../plugins/fastclick/fastclick.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/js/app.min.js"></script>
+        <script src="~/js/demo.js"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="~/plugins/datatables/dataTables.bootstrap.min.js"></script>
+        <script src="~/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+        <script src="~/plugins/iCheck/icheck.min.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.numeric.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.phone.extensions.js"></script>
+        <script src="~/plugins/input-mask/jquery.inputmask.regex.extensions.js"></script>
+    </environment>
+    <script>
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    </script>
+   @RenderSection("scripts", required: false)
+</body>
+</html>

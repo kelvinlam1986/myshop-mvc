@@ -1,0 +1,155 @@
+@model SalesTransactionVievModel
+
+@{
+    ViewData["Title"] = "Giao dịch bán hàng | Shop";
+    var products = ViewData["Products"] as IEnumerable<Product>;
+    decimal grandTotal = 0;
+    var customerId = Convert.ToInt32(ViewData["CustomerId"]);
+    var addedSalesLines = ViewData["AddedSalesLine"] as IEnumerable<SalesTranLineDTO>;
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success"
+            asp-controller="Home" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li class="active">Giao dịch bán hàng</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+     <div class="col-md-6">
+            @if (TempData["Fail"] != null)
+            {
+                <div class="alert alert-danger fade in alert-dismissable" id="customerAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Fail"]
+                </div>
+            } 
+        </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Giao dịch bán hàng</h3>
+            </div>
+             <div class="box-body">
+                <div class="row" style="min-height:400px">
+                    @Html.Partial("AddLineForm", Model.AddSalesTranLineDTO)
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Thành tiền</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (addedSalesLines != null) {
+                                    foreach (var line in addedSalesLines)
+                                    {
+                                        { grandTotal += line.Total; }
+                                        <tr>
+                                            <td>@line.Quantity.ToString("#,###0")</td>
+                                            <td class="record">@line.ProductName</td>
+                                            <td>@line.Price.ToString("#,###0")</td>
+                                            <td>@line.Total.ToString("#,###0")</td>
+                                            <td>
+                                                <a href="#updateordinance@(line.TransTempId)" 
+                                                    data-target="#updateordinance@(line.TransTempId)" 
+                                                    data-toggle="modal" style="color:#fff;" 
+                                                    class="small-box-footer">
+                                                    <i class="glyphicon glyphicon-edit text-blue"></i>
+                                                </a>
+
+                                                <a href="#delete@(line.TransTempId)" 
+                                                    data-target="#delete@(line.TransTempId)" 
+                                                    data-toggle="modal" 
+                                                    style="color:#fff;"
+                                                    class="small-box-footer">
+                                                    <i class="glyphicon glyphicon-trash text-red"></i>
+                                                </a>
+                                                <div id="updateordinance@(line.TransTempId)" 
+                                                    class="modal fade in" tabindex="-1" 
+                                                    role="dialog" 
+                                                    aria-labelledby="myModalLabel" 
+                                                    aria-hidden="true" 
+                                                    style="display: none;">
+                                                    <div class="modal-dialog">
+                                                        @Html.Partial("UpdateLineForm", Model.UpdatedSalesQuantityDTO, 
+                                                            new ViewDataDictionary(ViewData) {
+                                                            { "AddedLine", line }
+                                                        })
+                                                    </div>
+                                                </div>
+                                                <div id="delete@(line.TransTempId)" 
+                                                    class="modal fade in" 
+                                                    tabindex="-1" role="dialog" 
+                                                    aria-labelledby="myModalLabel" 
+                                                    aria-hidden="true" style="display: none;">
+                                                    <div class="modal-dialog">
+                                                       @Html.Partial("DeleteLineForm", Model.DeleteSalesLineDTO,
+                                                            new ViewDataDictionary(ViewData) {
+                                                                {"DeleteLine", line}
+                                                            })
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                 </div>
+                
+             </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="box box-primary">
+            <div class="box-body">
+                @Html.Partial("AddSalesOrderForm", Model.SalesOrderDTO, 
+                    new ViewDataDictionary(ViewData) {
+                        { "GrandTotal", grandTotal }
+                    })
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        window.setTimeout(function () {
+            $("#customerAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+    </script>
+    <script>
+         $(".select2").select2();
+         $("#quantity").on("blur", function () {
+            if ($(this).val().trim().length == 0) {
+                $(this).val("1");
+            }
+        });
+        //trigger blur once for the initial setup:
+        $("#quantity").trigger("blur");
+     
+        $("#discount").inputmask();
+        $("#cash").inputmask();
+    </script>
+}

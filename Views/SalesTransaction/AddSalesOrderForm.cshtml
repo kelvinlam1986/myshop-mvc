@@ -1,0 +1,74 @@
+@model SalesOrderDTO
+
+@{
+    var customerId = Convert.ToInt32(ViewData["CustomerId"]);
+    var grandTotal = Convert.ToDecimal(ViewData["GrandTotal"]);
+}
+
+<form method="post" name="autoSumForm" asp-controller="SalesTransaction"
+                    asp-action="AddSalesOrder">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="date">Tổng tiền</label>
+                <input type="text" 
+                    style="text-align:right" 
+                    class="form-control" 
+                    id="total" asp-for="@Model.Total"
+                    placeholder="Tổng tiền" 
+                    value="@grandTotal.ToString("#,###0")" 
+                    onFocus="startCalc();" 
+                    onBlur="stopCalc();"  
+                    tabindex="5" readonly>
+                <input type="hidden" 
+                    class="form-control text-right" 
+                    id="cid" asp-for="@Model.CustomerId" 
+                    value="@customerId">
+            </div><!-- /.form group -->
+            <div class="form-group">
+                <label for="date">Giảm giá</label>
+                <input type="text" 
+                    class="form-control text-right" 
+                    id="discount" value="0"
+                    asp-for="@Model.Discount"
+                    tabindex="6" placeholder="Giảm giá (VND)" 
+                    onFocus="startCalc();" onBlur="stopCalc();">
+            </div><!-- /.form group -->
+                <div class="form-group">
+                <label for="date">Tổng thành tiền</label>
+                    <input type="text" style="text-align:right" 
+                    class="form-control" id="amount_due" 
+                    asp-for="@Model.AmountDue" 
+                    placeholder="Tổng thành tiền" 
+                    value="@grandTotal.ToString("#,###0")" readonly>
+            </div><!-- /.form group -->
+            <div class="form-group" id="tendered">
+                <label for="date">Khách đưa</label><br>
+                <input type="text" style="text-align:right" 
+                    class="form-control" onFocus="startCalc();" 
+                    onBlur="stopCalc();"  
+                    id="tendered"   
+                    asp-for="@Model.Tendered" 
+                    placeholder="Khách đưa" value="0">
+            </div><!-- /.form group -->
+                <div class="form-group" id="change">
+                <label for="date">Tiền thối</label><br>
+                <input type="text" style="text-align:right" 
+                    class="form-control" id="change" 
+                    asp-for="@Model.Change" 
+                    id="change"
+                    value="0"
+                    placeholder="Tiền thối">
+            </div><!-- /.form group -->
+        </div>
+    </div>
+        <button class="btn btn-lg btn-block btn-primary" 
+            id="daterange-btn" name="btnCash" type="submit" disabled  tabindex="7">
+            Hoàn tất
+        </button>
+        <button class="btn btn-lg btn-block" id="daterange-btn" type="reset"  tabindex="8">
+            <a asp-controller="SalesTransaction" 
+                asp-action="CancelOrder"
+                asp-route-id="@customerId">Huỷ giao dịch</a>
+        </button>
+</form>

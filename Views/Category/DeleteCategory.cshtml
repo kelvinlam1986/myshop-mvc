@@ -1,0 +1,16 @@
+@model CategoryDTO
+      <form asp-action="DeleteCategory"
+            method="post"
+            asp-controller="Category">
+            <div class="modal-body">
+                Bạn có chắc muốn xoá danh mục @(Model.Name) ?
+                <input type="hidden" 
+                    class="form-control" asp-for="Id"/>
+                <input type="hidden" 
+                    class="form-control" asp-for="Name"/>
+            </div>
+            <div class="modal-footer clearfix"> 
+                <button type="submit" class="btn btn-primary"> Xoá</button>                         
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> Không</button> 
+            </div>
+    </form>

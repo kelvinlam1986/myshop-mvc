@@ -1,0 +1,157 @@
+<header class="main-header">
+           <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="container">
+                    @await Component.InvokeAsync("NavbarHeader")
+                    <!-- Navbar Right Menu -->
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                             <!-- Messages: style can be found in dropdown.less-->
+                            <li class="">
+                                <a href="log.php" class="dropdown-toggle">
+                                    <i class="glyphicon glyphicon-list-alt"></i>
+                                    Lịch sử truy cập
+                                </a>
+                            </li>
+                            <!-- Notifications Menu -->
+                            <li class="dropdown notifications-menu">
+                                <!-- Menu toggle button -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-refresh text-red">
+                                    </i> Sắp xếp lại
+                                    <span class="label label-danger">
+                                        100
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">Bạn có 100 sản phẩm cần sắp xếp lại</li>
+                                    <li>
+                                        <!-- Inner Menu: contains the notifications -->
+                                        <ul class="menu">
+                                        <li><!-- start notification -->
+                                            <a href="reorder.php">
+                                                <i class="glyphicon glyphicon-refresh text-red"></i> Dầu ăn
+                                            </a>
+                                        </li><!-- end notification -->
+                                        <li><!-- start notification -->
+                                            <a href="reorder.php">
+                                                <i class="glyphicon glyphicon-refresh text-red"></i> Xà bông
+                                            </a>
+                                        </li><!-- end notification -->
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="inventory.php">Xem tất cả</a></li>
+                                </ul>
+                            </li>
+                            <!-- Tasks Menu -->
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-wrench"></i> Bảo trì
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                         <!-- Inner Menu: contains the notifications -->
+                                         <ul class="menu">
+                                             <li><!-- start notification -->
+                                                <a asp-controller="Category" asp-action="Index">
+                                                    <i class="glyphicon glyphicon-user text-green"></i> 
+                                                    Danh mục
+                                                </a>
+                                            </li><!-- end notification -->
+                                            <li><!-- start notification -->
+                                                <a asp-controller="Customer" asp-action="Index">
+                                                    <i class="glyphicon glyphicon-user text-green">
+                                                    </i> Khách hàng
+                                                </a>
+                                            </li><!-- end notification -->
+                                             <li><!-- start notification -->
+                                                <a asp-controller="Creditor" asp-action="Index">
+                                                <i class="glyphicon glyphicon-user text-green"></i> 
+                                                Người xin cấp tín dụng
+                                                </a>
+                                            </li><!-- end notification -->
+                                            <li><!-- start notification -->
+                                                <a asp-controller="Product" asp-action="Index">
+                                                <i class="glyphicon glyphicon-cutlery text-green"></i> 
+                                                Sản phẩm
+                                                </a>
+                                            </li><!-- end notification -->
+                                            <li><!-- start notification -->
+                                                <a asp-controller="Supplier" asp-action="Index">
+                                                <i class="glyphicon glyphicon-send text-green"></i> 
+                                                    Nhà cung cấp
+                                                </a>
+                                            </li><!-- end notification -->
+                                         </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Tasks Menu -->
+                            <!-- Tasks Menu -->
+                            <li class="dropdown notifications-menu">
+                                 <!-- Menu toggle button -->
+                                <a href="stockin.php">
+                                <i class="glyphicon glyphicon-list text-green"></i> Kho hàng
+                                </a>
+                                <ul class="dropdown-menu">
+                                <li>
+                                </li>
+                                </ul>
+                            </li>
+                             <!-- Tasks Menu -->
+				            <li class="dropdown notifications-menu">
+                                 <!-- Menu toggle button -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-stats text-red"></i> Báo cáo
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                         <!-- Inner Menu: contains the notifications -->
+                                        <ul class="menu">
+                                            <li><!-- start notification -->
+                                                <a href="inventory.php">
+                                                <i class="glyphicon glyphicon-ok text-green"></i>Hàng tồn kho
+                                                </a>
+                                            </li><!-- end notification -->
+
+                                            <li><!-- start notification -->
+                                                <a href="sales.php">
+                                                <i class="glyphicon glyphicon-usd text-blue"></i>Bán hàng
+                                                </a>
+                                            </li><!-- end notification -->
+                                            <li><!-- start notification -->
+                                                <a href="receivables.php">
+                                                <i class="glyphicon glyphicon-th-list text-redr"></i>Khoản phải thu
+                                                </a>
+                                            </li><!-- end notification -->
+                                            <li><!-- start notification -->
+                                                <a href="income.php">
+                                                <i class="glyphicon glyphicon-th-list text-redr"></i>Thu nhập Chi nhánh
+                                                </a>
+                                            </li><!-- end notification -->
+                                            <li><!-- start notification -->
+                                                <a href="purchase_request.php">
+                                                <i class="glyphicon glyphicon-usd text-blue"></i>Yêu cầu Mua
+                                                </a>
+                                            </li><!-- end notification -->
+                                        </ul>
+                                    </li>
+                                </ul>
+				            </li>
+                            <!-- Tasks Menu -->
+                           @await Component.InvokeAsync("ProfileMenu")
+                            <li class="">
+                                <form method="POST" asp-controller="Account" asp-action="Logout" 
+                                    class="logoutForm" id="logoutForm">
+                                    <a href="#" onclick="document.getElementById('logoutForm').submit();" 
+                                        class="dropdown-toggle" style="a:hover { cursor: hand }">
+                                        <i class="glyphicon glyphicon-off text-red"></i>
+                                        Thoát
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>

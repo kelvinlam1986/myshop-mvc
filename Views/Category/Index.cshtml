@@ -1,0 +1,159 @@
+@model shop.ViewModels.Category.IndexViewModel
+
+@{
+    ViewData["Title"] = "Danh mục | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+            asp-controller="Home" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li class="active">Danh mục</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+     <div class="col-md-6">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success fade in alert-dismissable" id="categoryAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Fail"] != null)
+            {
+                <div class="alert alert-danger fade in alert-dismissable" id="categoryAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Fail"]
+                </div>
+            } 
+        </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+       @Html.Partial("AddNewCategory", Model.InputCategory)
+    </div><!-- /.col (right) -->
+    <div class="col-xs-8">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Danh sách danh mục</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Tên danh mục</th>
+                        <th>Hoạt động</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @foreach (var category in Model.CategoriesGrid) {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td>
+		                        <a class="btn btn-xs btn-primary"
+                                    asp-controller="Category" asp-action="Edit"
+                                    asp-route-id="@category.Id">
+                                    <i class="glyphicon glyphicon-edit text-blue"></i>
+                                </a>
+                                <button class="btn btn-xs btn-danger" 
+                                    type="button" data-toggle="modal" 
+                                    data-target="#RemoveCategory@(category.Id)">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                                <!-- Remove User Modal -->
+                                <div class="modal fade" id="RemoveCategory@(category.Id)" 
+                                    tabindex="-1" 
+                                    role="dialog"
+                                    aria-labelledby="myModalLabel"
+                                    aria-hidden="true" 
+                                    style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" 
+                                                    data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title"> Xoá danh mục</h4>
+                                            </div>
+                                            @Html.Partial("DeleteCategory", category)
+                                        </div>
+                                    </div>
+                                </div>
+						    </td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Tên danh mục</th>
+                        <th>Hoạt động</th>
+                      </tr> 
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(document).ready(function () {
+            var form = $('#formAddCategory')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function(label, element) {
+
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function(label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+        window.setTimeout(function () {
+            $("#categoryAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+    </script>
+    <script>
+      $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": true,
+          "info": true,
+          "autoWidth": false
+        });
+      });
+    </script>
+}

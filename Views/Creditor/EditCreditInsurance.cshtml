@@ -1,0 +1,152 @@
+@model shop.ViewModels.Creditor.CreditorDTO
+
+@{
+    ViewData["Title"] = "Tín dụng | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+            asp-controller="Creditor" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li><a asp-controller="Creditor" asp-action="Index">
+                <i class="fa fa-book"></i> Bảo hiểm tín dụng</a></li>
+            <li class="active">Cập nhật</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Cập nhật Bảo hiểm tín dụng</h3>
+            </div>
+            <form id="formEditCreditor" role="form" asp-controller="Creditor"
+                asp-action="UpdateCreditor" method="post">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="CiName" class="control-label">Tên công ty tín dụng</label>
+                                <input asp-for="CiName" class="form-control"
+                                    placeholder="Tên công ty tín dụng" required>
+                                <span asp-validation-for="CiName" class="text-danger"></span> 
+                                <input type="hidden" 
+                                        class="form-control" asp-for="Id"
+                                        required>
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label asp-for="CiDate" class="control-label">Ngày cấp</label>
+                                <input id="cidate" type="text" 
+                                    asp-for="CiDate" 
+                                    class="form-control" 
+                                    placeholder="Ngày cấp"
+                                    required>
+                                <span asp-validation-for="CiDate" class="text-danger"></span> 
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label asp-for="CiRemarks" class="control-label">Ghi chú</label>
+                                <textarea asp-for="CiRemarks" 
+                                    class="form-control" 
+                                    placeholder="Ghi chú"
+                                    required> </textarea>
+                                <span asp-validation-for="CiRemarks" class="text-danger"></span> 
+                            </div>
+                           <div class="form-group col-md-2">
+                                <label asp-for="PaySlip" class="control-label">Phiếu lương</label>
+                                <input id="payslip" type="checkbox" asp-for="PaySlip" 
+                                    class="minimal-red form-check">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label asp-for="ValidId" class="control-label">Id hợp lệ</label>
+                                <input id="validid" type="checkbox" asp-for="ValidId" 
+                                    class="minimal-red form-check">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label asp-for="Cert" class="control-label">Giấy chứng nhận</label>
+                                <input id="cert" type="checkbox" asp-for="Cert"
+                                    class="minimal-red form-check">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label asp-for="Cedula" class="control-label">Sao khê</label>
+                                <input id="cert" type="checkbox" asp-for="Cedula"
+                                    class="minimal-red form-check">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label asp-for="Income" class="control-label">Thu nhập</label>
+                                <input id="cert" type="checkbox" asp-for="Income"
+                                    class="minimal-red form-check">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" align="right">
+                    <a class="btn btn-success" asp-controller="Creditor" asp-action="Index">Trở về</a>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(document).ready(function () {
+            var form = $('#formEditCreditor')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function(label, element) {
+
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function(label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+
+        //Date picker
+        $('#cidate').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        })
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+          checkboxClass: 'icheckbox_minimal-red',
+          radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+          checkboxClass: 'icheckbox_flat-green',
+          radioClass: 'iradio_flat-green'
+        });
+    </script>
+}

@@ -1,0 +1,244 @@
+@model shop.ViewModels.Creditor.CreditorApplicationDTO
+
+@{
+    ViewData["Title"] = "Tín dụng | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+            asp-controller="Creditor" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li><a asp-controller="Creditor" asp-action="Index">
+                <i class="fa fa-book"></i>Tín dụng</a></li>
+            <li class="active">Xem</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+    <div class="col-md-12">
+         <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Xem yêu cầu trở thành người vay tín dụng</h3>
+            </div>
+            <form id="formCreditor" role="form" method="post">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="LastName">Họ</label>
+                                <input class="form-control" asp-for="LastName"readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="FirstName">Tên</label>
+                                <input id="firstname" type="text" 
+                                    class="form-control" asp-for="FirstName"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="BirthDate">Ngày sinh</label>
+                                <input id="birthday" asp-for="BirthDate" type="text" 
+                                    class="form-control" 
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="NickName">Nickname</label>
+                                <input asp-for="NickName" type="text" 
+                                    class="form-control" 
+                                    readonly>
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="Address">Địa chỉ</label>
+                                <input asp-for="Address" type="text"
+                                    class="form-control" 
+                                    readonly>
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label asp-for="Contact" class="control-label">Điện thoại</label>
+                                <input asp-for="Contact" type="text" 
+                                    class="form-control" 
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">  
+                                <label class="control-label" asp-for="HouseStatus">Tình trạng nhà cửa</label> <br>
+                                  <input asp-for="HouseStatus" type="text" 
+                                    class="form-control" 
+                                    readonly>
+                                </label>  
+                            </div>
+                            <div class="form-group col-md-6">  
+                                <label class="control-label" asp-for="HouseStatus">Đã thuê hoặc mua trong (%năm)</label> <br>
+                                  <input asp-for="Years" type="text" 
+                                    class="form-control" 
+                                    readonly>
+                                </label>  
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Tên chủ thuê, Địa chỉ, Liên hệ</label>
+                                <input type="text" 
+                                    class="form-control pull-right"
+                                     id="name" asp-for="Rent"
+                                     readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerName"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Điện thoại công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerNo"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Địa chỉ công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerAddress"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Số năm làm việc tại công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerYear"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Nghề nghiệp</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="Occupation"
+                                    readonly>
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label class="control-label">Lương tháng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="Salary"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="Spouse"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Số điện thoại của vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseNo"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Công ty của vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseEmp"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Lương của vợ / chồng</label>
+                                <input
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseIncome" 
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Thông tin chi tiết vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseDetails"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên của đồng nghiệp (Nếu cần)</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="CoMaker"
+                                    readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Thông tin chi tiết đồng nghiệp</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="CoMakerDetails"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" align="right">
+                    <a class="btn btn-success" asp-controller="Creditor" asp-action="Index">Trở về</a>
+                </div>
+            </form>
+         </div>
+    </div>
+</div>
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(document).ready(function () {
+            var form = $('#formEditCreditor')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function(label, element) {
+
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function(label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+
+        //Date picker
+        $('#cidate').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        })
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+          checkboxClass: 'icheckbox_minimal-red',
+          radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+          checkboxClass: 'icheckbox_flat-green',
+          radioClass: 'iradio_flat-green'
+        });
+    </script>
+}

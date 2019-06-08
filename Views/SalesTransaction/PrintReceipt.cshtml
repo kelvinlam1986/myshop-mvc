@@ -1,0 +1,134 @@
+@model PrintReceiptViewModel
+
+@{
+    ViewData["Title"] = "In hoá đơn | Shop";
+    decimal subTotal = 0;
+    decimal total = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-body">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3"><h5><b>@Model.Branch.Name</b></h5></th>
+                            <th><b><u>HOÁ ĐƠN</u></b></th>
+                        </tr>
+                        <tr>
+                            <th colspan="3"><h6>@Model.Branch.Address</h6></th>
+                            <th><span style="font-size: 16px;color: red">@Model.Payment.OrNo</span></th>
+                        </tr>
+                        <tr>
+                            <th colspan="3"><h6>Liên hệ #:@Model.Branch.Contact</h6></th>
+                            <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Bán cho</th>
+                            <th><u>@Model.SalesOrder.CustomerLastName @Model.SalesOrder.CustomerFirstName</u></th>
+                            <th>Ngày</th>
+                            <th><u>@DateTime.Now.ToString("dd/MM/yyyy")</u></th>
+                        </tr>
+                        <tr>
+                            <th>Địa chỉ</th>
+                            <th><u>@Model.SalesOrder.CustomerAddress</u></th>
+                            <th>Mã số thuế</th>
+                            <th>________________________</th>
+                        </tr>
+                        <tr>
+                            <th>Loại hình doanh nghiệp</th>
+                            <th>________________________</th>
+                            <th>Điều khoản</th>
+                            <th>________________________</th>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr style="border: solid 1px #000">
+                            <th>Số lượng</th>
+                            <th>ĐVT</th>
+                            <th>Mặt hàng</th>
+                            <th>Giá</th>
+                            <th class="text-right">Thành tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (SalesDetailDTO item in Model.SalesDetails)
+                        {
+                            {
+                                subTotal = 0;
+                                subTotal = item.Price * item.Quantity;
+                                total += subTotal;
+                            }
+                            <tr>
+                                <td>@item.Quantity</td>
+                                <td>cái</td>
+                                <td class="record">@item.ProductName</td>
+                                <td>@item.Price.ToString("#,###0")</td>
+                                <td style="text-align:right">@subTotal.ToString("#,###0")</td>
+                            </tr>    
+                        }
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">Tồng tiền</td>
+                            <td style="text-align:right">@total.ToString("#,###0")</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">Giảm giá</td>
+                            <td style="text-align:right">@Model.SalesOrder.Discount.ToString("#,###0")</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><b>Tổng thành tiền</b></td>
+                            <td style="text-align:right"><b>@Model.SalesOrder.GrandTotal.ToString("#,###0")</b></td>
+                        </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">Khách đưa</td>
+                        <td style="text-align:right">@Model.SalesOrder.Tendered.ToString("#,###0")</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><b>Tiền thối</b></td>
+                        <td style="text-align:right"><b>@Model.SalesOrder.Change.ToString("#,###0")</b></td>
+                      </tr> 
+                      <tr>
+                        <th>Người bán hàng:</th>
+                        <th></th>
+                        <th></th>
+                        <th>_________________________</th>
+                      </tr> 
+                      <tr>
+                        <th>@User.Identity.Name</th>
+                        <th></th>
+                        <th></th>
+                        <th>Chữ ký khách hàng</th>
+                      </tr>  
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <a class="btn btn-success btn-print" 
+            href="" onclick="window.print()">
+            <i class="glyphicon glyphicon-print"></i> In phiếu</a>
+        <a class="btn btn-primary btn-print" asp-controller="Home" asp-action="Index">
+            <i class="glyphicon glyphicon-arrow-left"></i> Trở về trang chủ</a>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+
+@{
+    ViewData["Title"] = "Tài khoản khách hàng | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success"
+            asp-controller="Customer" asp-action="Index">Trở về</a>
+        </h1>
+    </section>
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="box box-primary">
+            <div class="box-body">
+                <form method="post" action="" enctype="multipart/form-data">
+                    <img class="profile_pic" src = "uploads/default.gif">
+                    <div class="form-group">
+                        <label for="date">Tên khách hàng</label>
+                        <div class="input-group col-md-12">
+                        <h3 style="padding:2px 2px; margin: 2px 2px">Minh, Lam</h3>
+                        </div><!-- /.input group -->
+                    </div><!-- /.form group -->
+                    <div class="form-group">
+                        <label for="date">Địa chỉ</label>
+                        <div class="input-group col-md-12">
+                            240/2 Le Than Ton P Ben Thanh Q1 TP.HCM
+                        </div><!-- /.input group -->
+                    </div><!-- /.form group -->
+                    <div class="form-group">
+                        <label for="date">Liên hệ</label>
+                        <div class="input-group col-md-12">
+                            090 2305 226
+                        </div><!-- /.input group -->
+                    </div><!-- /.form group -->
+                    <div class="form-group">
+                        <label for="date">Số dư</label>
+                            <div class="input-group col-md-12">
+                            <h3 style="padding: 2px 2px; margin: 2px 2px">200,000</h3>
+                        </div><!-- /.input group -->
+                    </div><!-- /.form group --> 
+                    <a href="transaction.php" 
+                            class="btn btn-block btn-primary">
+                        <i class="glyphicon glyphicon-shopping-cart text-blue"></i>
+                            Tạo phiếu bán hàng
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-9">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="">
+                    <a href="#fa-icons" data-toggle="tab" 
+                        aria-expanded="true">Lịch sử mua hàng </a>
+                </li>
+                <li class="">
+                    <a href="#cash" data-toggle="tab">Lịch sử mua hàng tiền mặt</a>
+                </li>
+                <li class="">
+                    <a href="#payments" data-toggle="tab" 
+                        aria-expanded="false">Thanh toán</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="fa-icons">
+                    <table id="" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Số #</th>                      
+                                <th>SL</th>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Điều khoản</th>
+                                <th>Payable for</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>Ngày t.toán</th>
+                                <th>Tình trạng</th>
+                                <th>Xem</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,294 @@
+@model CreditorApplicationDTO
+
+@{
+    ViewData["Title"] = "Đơn duyệt vay tín dụng | Shop";
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+            asp-controller="Home" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li class="active">Khách hàng</li>
+        </ol>
+    </section>
+}
+
+
+<div class="row">
+     <div class="col-md-6">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success fade in alert-dismissable" id="creditorAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Fail"] != null)
+            {
+                <div class="alert alert-danger fade in alert-dismissable" id="creditorAlertMessage">
+                    <i class="fa fa-check"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @TempData["Fail"]
+                </div>
+            } 
+        </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+         <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Gửi yêu cầu trở thành người vay tín dụng</h3>
+            </div>
+            <form id="formCreditor" role="form" asp-controller="Creditor"
+                asp-action="AddCreditor" method="post">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="LastName">Họ</label>
+                                <input class="form-control" asp-for="LastName"
+                                     placeholder="Họ">
+                                <span asp-validation-for="LastName"></span> 
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="FirstName">Tên</label>
+                                <input id="firstname" type="text" 
+                                    class="form-control" asp-for="FirstName"
+                                    placeholder="Tên">
+                                <span class="text-danger" asp-validation-for="FirstName"></span> 
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="BirthDate">Ngày sinh</label>
+                                <input id="birthday" asp-for="BirthDate" type="text" 
+                                    class="form-control" 
+                                    placeholder="Ngày sinh">
+                                <span class="text-danger" asp-validation-for="BirthDate"></span> 
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="NickName">Nickname</label>
+                                <input asp-for="NickName" type="text" 
+                                    class="form-control" 
+                                    placeholder="Nickname">
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label class="control-label" asp-for="Address">Địa chỉ</label>
+                                <input asp-for="Address" type="text"
+                                    class="form-control" 
+                                    placeholder="Địa chỉ">
+                                <span class="text-danger" asp-validation-for="Address"></span> 
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label asp-for="Contact" class="control-label">Điện thoại</label>
+                                <input asp-for="Contact" type="text" 
+                                    class="form-control" 
+                                    placeholder="Điện thoại">
+                                <span class="text-danger" asp-validation-for="Contact"></span> 
+                            </div>
+                            <div class="form-group col-md-6">  
+                                <label class="control-label" asp-for="HouseStatus">Tình trạng nhà cửa</label> <br>
+                                <label class="radio-inline">
+                                    <input type="radio"
+                                        class="minimal-red"
+                                        asp-for="HouseStatus"
+                                        value="owned" checked> Chủ sở hữu
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio"
+                                        class="minimal-red"
+                                        asp-for="HouseStatus" 
+                                        value="rent"> Thuê
+                                </label>    
+                                <label class="radio-inline">
+                                    <input type="input" class="form-control" 
+                                        placeholder="Trong bao nhiêu năm"
+                                        asp-for="Years">
+                                </label>  
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Nếu đang thuê</label>
+                                <input type="text" 
+                                    class="form-control pull-right"
+                                     id="name" asp-for="Rent"
+                                     placeholder="Tên chủ thuê, Địa chỉ, Liên hệ">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerName"
+                                    placeholder="Tên công ty">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Điện thoại công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerNo"
+                                    placeholder="Điện thoại công ty">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Địa chỉ công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerAddress"
+                                    placeholder="Địa chỉ công ty">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Số năm làm việc tại công ty</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="EmployerYear"
+                                    placeholder="Số năm làm việc tại công ty">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Nghề nghiệp</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="Occupation"
+                                    placeholder="Nghề nghiệp">
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label class="control-label">Lương tháng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="Salary"
+                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true"
+                                    id="salary"
+                                    placeholder="Lương tháng">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="Spouse"
+                                    placeholder="Tên vợ / chồng">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Số điện thoại của vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseNo"
+                                    placeholder="Số điện thoại của vợ / chồng">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Công ty của vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseEmp"
+                                    placeholder="Công ty của vợ / chồng">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Lương của vợ / chồng</label>
+                                <input
+                                    class="form-control pull-right" 
+                                    id="spouseincome"
+                                    asp-for="SpouseIncome" 
+                                    data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true"
+                                    placeholder="Lương của vợ / chồng">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Thông tin chi tiết vợ / chồng</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="SpouseDetails"
+                                    placeholder="Thông tin chi tiết vợ / chồng">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên của đồng nghiệp (Nếu cần)</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="CoMaker"
+                                    placeholder="Tên của đồng nghiệp (Nếu cần)">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Thông tin chi tiết đồng nghiệp</label>
+                                <input type="text" 
+                                    class="form-control pull-right" 
+                                    asp-for="CoMakerDetails"
+                                    placeholder="Thông tin chi tiết đồng nghiệp">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" align="right">
+                    <a class="btn btn-success" asp-controller="Creditor" asp-action="Index">Trở về</a>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </form>
+         </div>
+    </div>
+</div>
+
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+     <script>
+        $(document).ready(function () {
+            $("#spouseincome").inputmask();
+            $("#salary").inputmask();
+            var form = $('#formCreditor')
+                , formData = $.data(form[0])
+                , settings = formData.validator.settings
+                // Store existing event handlers in local variables
+                , oldErrorPlacement = settings.errorPlacement
+                , oldSuccess = settings.success;
+
+            settings.errorPlacement = function(label, element) {
+
+                // Call old handler so it can update the HTML
+                oldErrorPlacement(label, element);
+
+                // Add Bootstrap classes to newly added elements
+                label.parents('.form-group').addClass('has-error');
+                label.addClass('text-danger');
+            };
+
+            settings.success = function(label) {
+                // Remove error class from <div class="form-group">, but don't worry about
+                // validation error messages as the plugin is going to remove it anyway
+                label.parents('.form-group').removeClass('has-error');
+
+                // Call old handler to do rest of the work
+                oldSuccess(label);
+            };
+        });
+    </script>
+    <script>
+        window.setTimeout(function () {
+            $("#creditorAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+    </script>
+    <script>
+        //Date picker
+        $('#birthday').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        })
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+          checkboxClass: 'icheckbox_minimal-red',
+          radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+          checkboxClass: 'icheckbox_flat-green',
+          radioClass: 'iradio_flat-green'
+        });
+    </script>
+}
