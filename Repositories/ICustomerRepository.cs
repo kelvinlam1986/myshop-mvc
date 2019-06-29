@@ -13,5 +13,6 @@ namespace shop.Repositories
         IEnumerable<Customer> GetCreditors();
         bool IsExistingByFirstLastName(string firstName, string lastName, int id);
         Customer GetCustomerByFirstAndLastName(string firstName, string lastName);
+        void UpdateBalanceTransaction(int id, decimal balance);
     }
 }

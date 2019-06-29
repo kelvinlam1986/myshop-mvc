@@ -11,6 +11,7 @@ namespace shop.Services
         private ITempTransRepository _tempTransRepository;
         private ISalesRepository _salesRepository;
         private IPaymentRepository _paymentRepository;
+        private ICustomerRepository _customerRepository;
         private IUnitOfWork _unitOfWork;
 
         public SalesTranService(
@@ -18,12 +19,14 @@ namespace shop.Services
             ITempTransRepository tempTransRepository,
             ISalesRepository salesRepository,
             IPaymentRepository paymentRepository,
+            ICustomerRepository customerRepository,
             IUnitOfWork unitOfWork)
         {
             this._productRepository = productRepository;
             this._tempTransRepository = tempTransRepository;
             this._salesRepository = salesRepository;
             this._paymentRepository = paymentRepository;
+            this._customerRepository = customerRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -174,6 +177,58 @@ namespace shop.Services
             }
         }
 
+
+        public void AddSalesOrderCredit(int customerId, string userId, decimal total, out string errorMessage)
+        {
+            errorMessage = "";
+            var salesTransaction = new Sales
+            {
+                CustomerId = customerId,
+                UserId = userId,
+                Discount = 0,
+                AmountDue = total,
+                Total = total,
+                DateAdded = DateTime.Now,
+                ModeOfPayment = "credit",
+                CashTendered = 0,
+                CashChange = 0,
+                CreatedBy = "admin",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "admin",
+                UpdatedDate = DateTime.Now
+            };
+
+            var tempTrans = this._tempTransRepository.GetAddedSalesLines(customerId);
+            foreach (var tempTran in tempTrans)
+            {
+                salesTransaction.SalesDetails.Add(
+                    new SalesDetail
+                    {
+                        ProductId = tempTran.ProductId,
+                        Quantity = tempTran.Quantity,
+                        Price = tempTran.Price,
+                        CreatedBy = "admin",
+                        CreatedDate = DateTime.Now,
+                        UpdatedBy = "admin",
+                        UpdatedDate = DateTime.Now
+                    }
+                );
+
+                this._productRepository.UpdateQuantityAfterSalesTransaction(
+                        tempTran.ProductId, tempTran.Quantity);
+            }
+
+            this._salesRepository.AddSalesTransaction(salesTransaction);
+            this._customerRepository.UpdateBalanceTransaction(customerId, total);
+            this._tempTransRepository.DeleteAllTransByCustomerTransaction(customerId);
+            bool isSuccess = this._unitOfWork.SaveChanges();
+            if (isSuccess == false)
+            {
+                errorMessage = "Có lỗi trong quá trình cập nhật dữ liệu.";
+                return;
+            }
+
+        }
         public void CancelOrder(int customerId, out string errorMessage)
         {
             errorMessage = "";

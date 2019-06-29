@@ -12,5 +12,7 @@ namespace shop.Services
              decimal discount, decimal payment, decimal amountdue,
              decimal tendered, decimal change, out string errorMessage);
         void CancelOrder(int customerId, out string errorMessage);
+        void AddSalesOrderCredit(int customerId, string userId, decimal total,
+                            out string errorMessage);
     }
 }

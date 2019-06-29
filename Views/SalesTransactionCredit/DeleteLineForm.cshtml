@@ -1,0 +1,40 @@
+ @model DeleteSalesCreditLineDTO
+
+ @{
+    var customerId = Convert.ToInt32(ViewData["CustomerId"]);
+    var line = ViewData["DeleteLine"] as SalesTranLineDTO;
+}
+ 
+ <form class="form-horizontal" method="post" 
+        asp-controller="SalesTransactionCredit" 
+        asp-action="DeleteLine" enctype='multipart/form-data'>
+        <div class="modal-content" style="height:auto">
+            <div class="modal-header">
+                <button type="button" 
+                    class="close" 
+                    data-dismiss="modal" 
+                    aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Xoá dòng</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" 
+                    class="form-control" 
+                    asp-for="@Model.CustomerId"
+                    value="@customerId" 
+                    required>   
+                <input type="hidden" 
+                    class="form-control" 
+                    id="price" asp-for="@Model.TransTempId"
+                    value="@line.TransTempId" required> 
+                <p>Bạn có chắc muốn xoá dòng sản phẩm @line.ProductName ?</p>
+            </div>
+                <div class="modal-footer">
+                <button type="submit" 
+                    class="btn btn-primary">Xoá</button>
+                <button type="button" 
+                    class="btn btn-default" 
+                    data-dismiss="modal"> Đóng</button>
+                </div>
+        </div>
+</form>

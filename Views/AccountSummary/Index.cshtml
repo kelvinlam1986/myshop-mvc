@@ -1,7 +1,17 @@
+@model shop.ViewModels.Customer.CustomerDTO
 
 @{
     ViewData["Title"] = "Tài khoản khách hàng | Shop";
 }
+
+<style>
+img.profile_pic {
+    width: 152px;
+    height: 125px;
+    border: 5px solid #ccc;
+    margin-bottom: 10px;
+}
+</style>
 
 @section contentHeader {
     <!-- Content Header (Page header) -->
@@ -22,32 +32,36 @@
                     <div class="form-group">
                         <label for="date">Tên khách hàng</label>
                         <div class="input-group col-md-12">
-                        <h3 style="padding:2px 2px; margin: 2px 2px">Minh, Lam</h3>
+                        <h3 style="padding:2px 2px; margin: 2px 2px">@(Model.FirstName) @(Model.LastName)</h3>
                         </div><!-- /.input group -->
                     </div><!-- /.form group -->
                     <div class="form-group">
                         <label for="date">Địa chỉ</label>
                         <div class="input-group col-md-12">
-                            240/2 Le Than Ton P Ben Thanh Q1 TP.HCM
+                            @Model.Address
                         </div><!-- /.input group -->
                     </div><!-- /.form group -->
                     <div class="form-group">
                         <label for="date">Liên hệ</label>
                         <div class="input-group col-md-12">
-                            090 2305 226
+                            @Model.Contact
                         </div><!-- /.input group -->
                     </div><!-- /.form group -->
                     <div class="form-group">
                         <label for="date">Số dư</label>
                             <div class="input-group col-md-12">
-                            <h3 style="padding: 2px 2px; margin: 2px 2px">200,000</h3>
+                            <h3 style="padding: 2px 2px; margin: 2px 2px">@Model.Balance.ToString("#,###0.00")</h3>
                         </div><!-- /.input group -->
-                    </div><!-- /.form group --> 
-                    <a href="transaction.php" 
+                    </div><!-- /.form group -->
+                    @if (Model.Balance > 0) {
+                        <a asp-controller="SalesTransactionCredit" asp-action="Index"
+                            asp-route-customerId="@Model.Id"
                             class="btn btn-block btn-primary">
-                        <i class="glyphicon glyphicon-shopping-cart text-blue"></i>
-                            Tạo phiếu bán hàng
-                    </a>
+                            <i class="glyphicon glyphicon-shopping-cart text-blue"></i>
+                                Tạo phiếu bán hàng
+                        </a>
+                    }
+                    
                 </form>
             </div>
         </div>
