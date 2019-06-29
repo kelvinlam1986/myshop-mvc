@@ -30,6 +30,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var branchAddress = HttpContext.Session.GetString(
                 SessionConstant.BranchAddressSession
             );
@@ -70,8 +76,13 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            ViewData["Message"] = "Your application description page.";
             return View();
         }
 
@@ -79,8 +90,13 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            ViewData["Message"] = "Your contact page.";
             return View();
         }
 
@@ -88,6 +104,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Error()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
     }

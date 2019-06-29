@@ -4,7 +4,9 @@ using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using shop.Common;
 using shop.Models;
 using shop.Repositories;
 using shop.ViewModels.Product;
@@ -38,6 +40,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var productsDTO = this._productRepository.GetProductsView();
             return View(productsDTO);
         }
@@ -46,6 +54,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddNew()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var suppliers = this._supplierRepository.GetSuppliers();
             var categories = this._categoryRepository.GetCategories();
             ViewData["Suppliers"] = suppliers;
@@ -58,6 +72,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddProduct(NewProductDTO newProduct)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var suppliers = this._supplierRepository.GetSuppliers();
             var categories = this._categoryRepository.GetCategories();
             ViewData["Suppliers"] = suppliers;
@@ -158,6 +178,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var suppliers = this._supplierRepository.GetSuppliers();
             var categories = this._categoryRepository.GetCategories();
             ViewData["Suppliers"] = suppliers;
@@ -172,6 +198,12 @@ namespace shop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateProduct(EditProductDTO product)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var suppliers = this._supplierRepository.GetSuppliers();
             var categories = this._categoryRepository.GetCategories();
             ViewData["Suppliers"] = suppliers;

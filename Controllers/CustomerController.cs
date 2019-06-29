@@ -29,6 +29,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var customers = this._customerRepository.GetCustomers();
             var customersDTO = this._mapper.Map<IEnumerable<CustomerDTO>>(customers);
             return View(customersDTO);
@@ -38,6 +44,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var customer = this._customerRepository.GetCustomerById(id);
             var customerDTO = this._mapper.Map<CustomerDTO>(customer);
             return View(customerDTO);
@@ -47,6 +59,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddNew()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var addNewVM = new AddNewViewModel();
             var customers = this._customerRepository.GetCustomers().ToList();
             var customersVM = this._mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(customers);
@@ -59,6 +77,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddCustomer(CustomerDTO customer)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var addNewVM = new AddNewViewModel();
             var customers = this._customerRepository.GetCustomers().ToList();
             var customersVM = this._mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(customers);
@@ -110,6 +134,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult DeleteCustomer(CustomerDTO customerDTO)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var customer = this._mapper.Map<Customer>(customerDTO);
             bool isSuccess = this._customerRepository.DeleteCustomer(customer);
             if (isSuccess)
@@ -129,6 +159,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult UpdateCustomer(CustomerDTO customer)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("Edit", customer);

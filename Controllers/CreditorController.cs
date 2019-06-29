@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using shop.Common;
 using shop.Models;
 using shop.Repositories;
 using shop.ViewModels.Creditor;
@@ -25,6 +27,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Application()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
 
@@ -32,6 +40,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var creditors = this._customerRepository.GetCreditors();
             var creditorsDTO = this._mapper.Map<IEnumerable<Customer>, IEnumerable<CreditorDTO>>(creditors);
             return View(creditorsDTO);
@@ -41,6 +55,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult EditCreditInsurance(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var customer = this._customerRepository.GetCustomerById(id);
             var creditorDTO = this._mapper.Map<CreditorDTO>(customer);
             return View(creditorDTO);
@@ -51,6 +71,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult UpdateCreditor(CreditorDTO creditor)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("EditCreditInsurance", creditor);
@@ -91,6 +117,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddCreditor(CreditorApplicationDTO creditor)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("Application", creditor);
@@ -171,6 +203,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult ViewApplication(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var customer = this._customerRepository.GetCustomerById(id);
             var creditorDTO = this._mapper.Map<CreditorApplicationDTO>(customer);
             return View(creditorDTO);

@@ -54,6 +54,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddNew()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var addNewVM = new AddNewViewModel();
             var customers = this._customerRepository.GetCustomers().ToList();
             var customersVM = this._mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(customers);
@@ -66,6 +72,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddCustomer(CustomerDTO customer)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var addNewVM = new AddNewViewModel();
             var customers = this._customerRepository.GetCustomers().ToList();
             var customersVM = this._mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(customers);
@@ -115,6 +127,12 @@ namespace shop.Controllers
         [HttpPost]
         public IActionResult ExistingCustomer(AddNewViewModel model)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var salesTransactionViewModel = new SalesTransactionVievModel();
             var customer = this._customerRepository.GetCustomerById(model.ExistingCustomerId);
             if (customer == null)
@@ -132,6 +150,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index(int customerId)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var salesTransactionViewModel = new SalesTransactionVievModel();
             var customer = this._customerRepository.GetCustomerById(customerId);
             if (customer == null)
@@ -152,6 +176,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddLine(AddSalesTranLineDTO salesLine)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService
                     .AddTransaction(
@@ -177,6 +207,12 @@ namespace shop.Controllers
 
         public IActionResult UpdateLine(UpdatedSalesQuantityDTO line)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService.UpdateLine(line.TransTempId, line.Quantity, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
@@ -193,6 +229,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult DeleteLine(DeleteSalesLineDTO line)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService.DeleteLine(line.TransTempId, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
@@ -211,6 +253,12 @@ namespace shop.Controllers
 
         public IActionResult AddSalesOrder(SalesOrderDTO salesOrder)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var discount = Convert.ToDecimal(salesOrder.Discount);
             var total = Convert.ToDecimal(salesOrder.Total);
@@ -241,6 +289,12 @@ namespace shop.Controllers
 
         public IActionResult CancelOrder(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService.CancelOrder(id, out errorMessage);
             if (errorMessage != "")
@@ -255,6 +309,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult PrintReceipt(int customerId)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var branchName = this.HttpContext.Session.GetString(
                 SessionConstant.BranchNameSession
             );

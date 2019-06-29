@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using shop.Common;
 using shop.Models;
 using shop.Repositories;
 using shop.ViewModels.Category;
@@ -28,6 +30,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var categoriesDTO = GetCategories();
             var indexViewModel = new IndexViewModel
             {
@@ -40,6 +48,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var category = this._categoryRepository.GetCategoryById(id);
             var categoryDTO = this._mapper.Map<CategoryDTO>(category);
             return View(categoryDTO);
@@ -51,6 +65,12 @@ namespace shop.Controllers
 
         public IActionResult UpdateCategory(CategoryDTO category)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("Edit", category);
@@ -90,6 +110,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult DeleteCategory(CategoryDTO category)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (ModelState.IsValid)
             {
                 var categoryDb = this._mapper.Map<Category>(category);
@@ -116,6 +142,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index(CategoryDTO category)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var categoriesDTO = GetCategories();
             var indexViewModel = new IndexViewModel
             {

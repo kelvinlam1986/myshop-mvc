@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using shop.Common;
 using shop.Models;
 using shop.Repositories;
 using shop.Services;
@@ -39,6 +41,12 @@ namespace shop.Controllers
         [HttpGet]
         public IActionResult Index(int customerId)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var salesTransactionCreditViewModel = new SalesTransactionCreditViewModel();
             var customer = this._customerRepository.GetCustomerById(customerId);
             if (customer == null)
@@ -60,6 +68,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddLine(AddSalesTranCreditLineDTO salesLine)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService
                     .AddTransaction(
@@ -85,6 +99,12 @@ namespace shop.Controllers
 
         public IActionResult UpdateLine(UpdatedSalesCreditQuantityDTO line)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService.UpdateLine(line.TransTempId, line.Quantity, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
@@ -101,6 +121,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult DeleteLine(DeleteSalesCreditLineDTO line)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             string errorMessage = "";
             this._salesTranService.DeleteLine(line.TransTempId, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
@@ -118,6 +144,12 @@ namespace shop.Controllers
 
         public IActionResult AddSalesOrder(SalesOrderCreditDTO salesOrder)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var discount = Convert.ToDecimal(salesOrder.Discount);
             var total = Convert.ToDecimal(salesOrder.Total);
@@ -142,6 +174,12 @@ namespace shop.Controllers
         [HttpGet]
         public IActionResult OldCustomer()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var customers = this._customerRepository.GetCustomers();
             var searchCustomersDTO =
                 this._mapper.Map<IEnumerable<Customer>, IEnumerable<SearchCustomerDTO>>(customers);
@@ -155,6 +193,12 @@ namespace shop.Controllers
 
         public IActionResult CustomerAccount(SearchCustomerDTO searchCustomer)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
     }

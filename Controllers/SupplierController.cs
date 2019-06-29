@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using shop.Common;
 using shop.Models;
 using shop.Repositories;
 using shop.ViewModels.Supplier;
@@ -24,6 +26,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var suppliers = this._supplierRepository.GetSuppliers();
             var suppliersDTO =
                 this._mapper.Map<IEnumerable<Supplier>, IEnumerable<SupplierDTO>>(suppliers);
@@ -34,6 +42,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult AddNew()
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
 
@@ -42,6 +56,12 @@ namespace shop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddSupplier(SupplierDTO supplier)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("AddNew", supplier);
@@ -77,6 +97,12 @@ namespace shop.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var supplier = this._supplierRepository.GetById(id);
             var supplierDTO = this._mapper.Map<SupplierDTO>(supplier);
             return View(supplierDTO);
@@ -87,6 +113,12 @@ namespace shop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateSupplier(SupplierDTO supplier)
         {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("AddNew", supplier);
