@@ -18,7 +18,7 @@ namespace shop.Repositories
             {
                 return this._context.SaveChanges() > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

@@ -72,7 +72,8 @@
     <div class="col-md-3">
         <div class="box box-primary">
             <div class="box-body">
-                <form method="post" name="autoSumForm" action="terms_add.php">
+                <form method="post" name="autoSumForm" asp-controller="Credit" 
+                        asp-action="AddTerm">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -109,9 +110,9 @@
                                 <select class="form-control select2" 
                                      asp-for="TermName"
                                      tabindex="1" required>
-                                    <option>Hằng tháng</option>
-                                    <option>Hằng tuần</option>
-                                    <option>Hằng ngày</option>
+                                    <option value="monthly">Hằng tháng</option>
+                                    <option value="weekly">Hằng tuần</option>
+                                    <option value="daily">Hằng ngày</option>
                                 </select>
                             </div><!-- /.form group -->
                              <div class="form-group">

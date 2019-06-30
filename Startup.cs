@@ -67,11 +67,13 @@ namespace shop
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<ITempTransRepository, TempTransRepository>();
             services.AddScoped<ISalesRepository, SalesRepository>();
+            services.AddScoped<ITermRepository, TermRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             // services
             services.AddScoped<ISalesTranService, SalesTranService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             // Configure service for AutoMapper
             var config = new AutoMapper.MapperConfiguration(cfg =>

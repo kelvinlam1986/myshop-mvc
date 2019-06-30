@@ -85,10 +85,17 @@ namespace shop.Repositories
             return this._context.Customers.FirstOrDefault(x => x.FirstName == firstName && x.LastName == lastName);
         }
 
-        public void UpdateBalanceTransaction(int id, decimal balance)
+        public void UpdateBalanceTransaction(int id, decimal balance, bool increment)
         {
             var customer = this.GetCustomerById(id);
-            customer.Balance = customer.Balance + balance;
+            if (increment)
+            {
+                customer.Balance = customer.Balance + balance;
+            }
+            else
+            {
+                customer.Balance = balance;
+            }
         }
     }
 }

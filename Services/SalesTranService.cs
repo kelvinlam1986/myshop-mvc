@@ -221,7 +221,7 @@ namespace shop.Services
             }
 
             this._salesRepository.AddSalesTransaction(salesTransaction);
-            this._customerRepository.UpdateBalanceTransaction(customerId, total);
+            this._customerRepository.UpdateBalanceTransaction(customerId, total, true);
             this._tempTransRepository.DeleteAllTransByCustomerTransaction(customerId);
             bool isSuccess = this._unitOfWork.SaveChanges();
             if (isSuccess == false)
