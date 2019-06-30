@@ -7,5 +7,6 @@ namespace shop.Common
         public static string BranchAddressSession = "BranchAddressSession";
         public static string BranchContactSession = "BranchContactSession";
         public static string NewCustomerTransactionSession = "NewCustomerTransactionSession";
+        public static string SalesId = "SalesId";
     }
 }

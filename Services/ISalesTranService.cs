@@ -13,6 +13,6 @@ namespace shop.Services
              decimal tendered, decimal change, out string errorMessage);
         void CancelOrder(int customerId, out string errorMessage);
         void AddSalesOrderCredit(int customerId, string userId, decimal total,
-                            out string errorMessage);
+                            out string errorMessage, out int salesId);
     }
 }

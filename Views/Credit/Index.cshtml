@@ -1,0 +1,155 @@
+@model AddCreditDTO
+@{
+    ViewData["Title"] = "Tiền nợ | Shop";
+    var salesDetails = ViewData["SalesDetails"] as IEnumerable<SalesDetailDTO>;
+    decimal total = 0;
+    decimal grandTotal = 0;
+    decimal interest = 0;
+    decimal grandTotalInterest = 0;
+    decimal downPayment = 0;
+}
+
+@section contentHeader {
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <a class="btn btn-success" 
+            asp-controller="Home" asp-action="Index">Trở về</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-controller="Home" asp-action="Index">
+                <i class="fa fa-dashboard"></i> Trang chủ</a></li>
+            <li class="active">Trả góp</li>
+        </ol>
+    </section>
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Giao dịch bán hàng</h3>
+            </div>
+            <div class="box-body">
+                <div class="row" style="min-height:400px">
+                    <form method="post" action="">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th class="pull-right">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var salesDetail in salesDetails) {
+                                        { 
+                                            total = salesDetail.Quantity * salesDetail.Price; 
+                                            grandTotal += total;
+                                        }
+                                        <tr>
+                                            <td>@salesDetail.Quantity.ToString("#,###0")</td>
+                                            <td class="record">@salesDetail.ProductName</td>
+                                            <td>@salesDetail.Price.ToString("#,###0")</td>
+                                            <td style="text-align:right">@total.ToString("#,###0")</td>
+                                        </tr>
+                                    }
+                                    
+                                    <tr>
+                                        <td colspan="3">Tổng cộng</td>
+                                        <td class="pull-right">@grandTotal.ToString("#,###0")</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="box box-primary">
+            <div class="box-body">
+                <form method="post" name="autoSumForm" action="terms_add.php">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Interest">3% Tiền lãi</label>
+                                <input type="hidden" asp-for="CustomerId">
+                                @{ interest = grandTotal * 3 / 100; }
+                                <input type="text" style="text-align:right" 
+                                    class="form-control" id="date" placeholder="Tiền lãi" 
+                                    asp-for="Interest"
+                                    value=@interest.ToString("#,###0") tabindex="5" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="GrandTotal">Tổng thành tiền</label>
+                                @{ grandTotalInterest = total + interest; }
+                                <input type="text" style="text-align:right" 
+                                    class="form-control" id="grandtotal" 
+                                    asp-for="GrandTotal" placeholder="Tổng thành tiền" 
+                                    value=@grandTotalInterest.ToString("#,###0") tabindex="5" readonly>
+                            
+                            </div><!-- /.form group -->
+                            <div class="form-group">
+							    <label asp-for="DownPayment">Tiền đặt cọc</label>
+                                @{ downPayment = grandTotalInterest * 20 / 100; }
+								<input type="text" class="form-control" 
+                                     id="down"
+                                     asp-for="DownPayment" tabindex="6" 
+                                     placeholder="Tiền đặt cọc" 
+                                     data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true"
+                                     value=@downPayment.ToString("#,###0") 
+                                     required>
+						    </div><!-- /.form group -->
+                            <div class="form-group">
+                                <label asp-for="TermName">Điều khoản thanh toán</label>
+                                <select class="form-control select2" 
+                                     asp-for="TermName"
+                                     tabindex="1" required>
+                                    <option>Hằng tháng</option>
+                                    <option>Hằng tuần</option>
+                                    <option>Hằng ngày</option>
+                                </select>
+                            </div><!-- /.form group -->
+                             <div class="form-group">
+                                <label asp-for="PayableFor">Trả trong vòng</label>
+                                <select class="form-control select2" 
+                                    asp-for="PayableFor" 
+                                    tabindex="1" required>
+                                    <option value="1">1 tháng</option>
+                                    <option value="2">2 tháng</option>
+                                    <option value="3">3 tháng</option>
+                                    <option value="4">4 tháng</option>
+                                    <option value="5">5 tháng</option>
+                                    <option value="6">6 tháng</option>
+                                </select>
+                            </div><!-- /.form group -->
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-block btn-success" 
+                        id="daterange-btn" name="finish" 
+                        type="submit"  tabindex="7">
+                        Hoàn tất
+                      </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+     <script>
+        window.setTimeout(function () {
+            $("#customerAlertMessage").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 200);
+    </script>
+    <script>
+         $(".select2").select2();
+         $("#down").inputmask();
+    </script>
+}

@@ -157,17 +157,41 @@ namespace shop.Controllers
             var tendered = Convert.ToDecimal(salesOrder.Tendered);
             var change = Convert.ToDecimal(salesOrder.Change);
             string errorMessage = "";
+            int salesId = 0;
             this._salesTranService.AddSalesOrderCredit(
                 salesOrder.CustomerId,
                 userId,
                 total,
-                out errorMessage);
+                out errorMessage,
+                out salesId);
             if (errorMessage != "")
             {
                 TempData["Fail"] = errorMessage;
                 return RedirectToAction("Index", "SalesTransactionCredit", new { customerId = salesOrder.CustomerId });
             }
-            return RedirectToAction("Index", "SalesTransactionCredit", new { customerId = salesOrder.CustomerId });
+
+            this.HttpContext.Session.SetInt32(SessionConstant.SalesId, salesId);
+            return RedirectToAction("Index", "Credit", new { customerId = salesOrder.CustomerId });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult CancelOrder(int id)
+        {
+            string username = this.HttpContext.Session.GetString(SessionConstant.UserNameSession);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            string errorMessage = "";
+            this._salesTranService.CancelOrder(id, out errorMessage);
+            if (errorMessage != "")
+            {
+                TempData["Fail"] = errorMessage;
+                return RedirectToAction("Index", "SalesTransactionCredit", new { customerId = id });
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize]

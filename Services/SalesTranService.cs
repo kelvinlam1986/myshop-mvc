@@ -178,9 +178,11 @@ namespace shop.Services
         }
 
 
-        public void AddSalesOrderCredit(int customerId, string userId, decimal total, out string errorMessage)
+        public void AddSalesOrderCredit(int customerId, string userId,
+            decimal total, out string errorMessage, out int salesId)
         {
             errorMessage = "";
+            salesId = 0;
             var salesTransaction = new Sales
             {
                 CustomerId = customerId,
@@ -226,6 +228,11 @@ namespace shop.Services
             {
                 errorMessage = "Có lỗi trong quá trình cập nhật dữ liệu.";
                 return;
+            }
+
+            if (salesTransaction.Id != 0)
+            {
+                salesId = salesTransaction.Id;
             }
 
         }
