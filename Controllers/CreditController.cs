@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using shop.Common;
 using shop.Repositories;
 using shop.Services;
+using shop.Models;
 using shop.ViewModels.Credit;
+using shop.ViewModels.SalesTransaction;
 
 namespace shop.Controllers
 {
@@ -14,13 +16,19 @@ namespace shop.Controllers
     {
         private ISalesRepository _salesRepository;
         private IPaymentService _paymentService;
+        private IBranchRepository _branchRepository;
+        private IPaymentRepository _paymentRepository;
 
         public CreditController(
             ISalesRepository salesRepository,
+            IBranchRepository branchRepository,
+            IPaymentRepository paymentRepository,
             IPaymentService paymentService)
         {
             this._salesRepository = salesRepository;
             this._paymentService = paymentService;
+            this._branchRepository = branchRepository;
+            this._paymentRepository = paymentRepository;
         }
 
         [HttpGet]
@@ -37,6 +45,50 @@ namespace shop.Controllers
             ViewData["SalesDetails"] = salesDetailList;
             var addCreditDto = new AddCreditDTO { CustomerId = customerId };
             return View(addCreditDto);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult PrintReceipt()
+        {
+            int salesId = Convert.ToInt32(this.HttpContext.Session.GetInt32(SessionConstant.SalesId));
+            var branchName = this.HttpContext.Session.GetString(
+                SessionConstant.BranchNameSession
+            );
+            var branchAddress = this.HttpContext.Session.GetString(
+                SessionConstant.BranchAddressSession
+            );
+            var branchContact = this.HttpContext.Session.GetString(
+                SessionConstant.BranchContactSession
+            );
+
+            if (string.IsNullOrEmpty(branchAddress) && string.IsNullOrEmpty(branchName)
+                 && string.IsNullOrEmpty(branchContact))
+            {
+                var branchInDb = this._branchRepository.GetOne();
+                branchName = branchInDb.Name;
+                branchAddress = branchInDb.Address;
+                branchContact = branchInDb.Contact;
+            }
+
+            var salesOrder = this._salesRepository.GetSalesOrderTermPrint(salesId);
+            var payment = this._paymentRepository.GetPaymentBySalesID(salesOrder.SalesId);
+            var salesDetails = this._salesRepository.GetListSalesDetailOf(salesOrder.SalesId);
+
+            var branch = new Branch
+            {
+                Name = branchName,
+                Address = branchAddress,
+                Contact = branchContact
+            };
+
+            var printOrder = new PrintReceiptViewModel();
+            printOrder.Branch = branch;
+            printOrder.SalesOrder = salesOrder;
+            printOrder.Payment = payment;
+            printOrder.SalesDetails = salesDetails;
+
+            return View(printOrder);
         }
 
         [HttpPost]
@@ -61,8 +113,7 @@ namespace shop.Controllers
                 payableFor,
                 interest,
                 out errorMessage);
-            this.HttpContext.Session.Remove(SessionConstant.SalesId);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("PrintReceipt", "Credit");
         }
     }
 }

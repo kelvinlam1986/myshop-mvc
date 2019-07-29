@@ -8,6 +8,7 @@ namespace shop.Repositories
     {
         void AddSalesTransaction(Sales sales);
         SalesOrderPrintDTO GetSalesOrderPrint(int salesId);
+        SalesOrderPrintDTO GetSalesOrderTermPrint(int salesId);
         SalesOrderPrintDTO GeTheLastSalesOrderOf(int customerId);
         IEnumerable<SalesDetailDTO> GetListSalesDetailOf(int salesId);
     }

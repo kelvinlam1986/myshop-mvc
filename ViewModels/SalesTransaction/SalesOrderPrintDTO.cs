@@ -1,3 +1,5 @@
+using System;
+
 namespace shop.ViewModels.SalesTransaction
 {
     public class SalesOrderPrintDTO
@@ -12,6 +14,11 @@ namespace shop.ViewModels.SalesTransaction
         public decimal GrandTotal { get; set; }
         public decimal Tendered { get; set; }
         public decimal Change { get; set; }
-
+        public string TermName { get; set; }
+        public string PayableFor { get; set; }
+        public DateTime DueDate { get; set; }
+        public string CoMaker { get; set; }
+        public decimal Interest { get; set; }
+        public decimal Down { get; set; }
     }
 }

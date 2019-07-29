@@ -1,0 +1,143 @@
+@model PrintReceiptViewModel
+
+@{
+    ViewData["Title"] = "In hoá  đơn | Shop";
+    decimal subTotal = 0;
+    decimal total = 0;
+    decimal remain = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-body">
+            <form method="post" action="">
+           <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3"><h5><b>@Model.Branch.Name</b></h5></th>
+                            <th><b><u>HOÁ ĐƠN</u></b></th>
+                        </tr>
+                        <tr>
+                            <th colspan="3"><h6>@Model.Branch.Address</h6></th>
+                            <th>
+                                <span style="font-size: 16px;color: red">
+                                    Số @Model.Payment.OrNo
+                                </span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">
+                                <h6>Liên hệ #: @Model.Branch.Contact</h6>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Tên khách hàng</th>
+                            <th>@Model.SalesOrder.CustomerLastName @Model.SalesOrder.CustomerFirstName</th>
+                            <th>Điều khoản</th>
+                            <th>@Model.SalesOrder.TermName</th>
+                        </tr>
+                        <tr>
+                            <th>Liên hệ #</th>
+                            <th>@Model.SalesOrder.CustomerContact</th>
+                            <th>Trả trong vòng</th>
+                            <th>@Model.SalesOrder.PayableFor</th>
+                        </tr>
+                        <tr>
+                            <th>Địa chỉ</th>
+                            <th>@Model.SalesOrder.CustomerAddress</th>
+                            <th>Ngày phải trả</th>
+                            <th>@Model.SalesOrder.DueDate.ToString("dd/MM/yyyy")</th>
+                        </tr>
+                        <tr>
+                            <th>Người bảo lãnh</th>
+                            <th>@Model.SalesOrder.CoMaker</th>
+                            <th>Số tiền phải trả</th>
+                            <th>@Model.SalesOrder.AmountDue.ToString("#,###0")</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Số lượng</th>
+                            <th>Đvt</th>
+                            <th>Mặt hàng</th>
+                            <th>Giá</th>
+                            <th class="text-right">Tổng cộng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (SalesDetailDTO item in Model.SalesDetails) {
+                            {
+                                subTotal = 0;
+                                subTotal = item.Price * item.Quantity;
+                                total += subTotal;
+                            }
+                            <tr>
+                                <td>@item.Quantity</td>
+                                <td>Cái</td>
+                                <td class="record">@item.ProductName</td>
+                                <td>@item.Price.ToString("#,###0")</td>
+                                <td style="text-align:right">@subTotal.ToString("#,###0")</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">TỔNG THÀNH TIỀN</td>
+                            <td style="text-align:right">@total.ToString("#,###0")</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">Tìền lãi</td>
+                            <td style="text-align:right">@Model.SalesOrder.Interest.ToString("#,###0")</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">Tiền đặt cọc</td>
+                            <td style="text-align:right">@Model.SalesOrder.Down.ToString("#,###0")</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><b>Số tiền còn lại</b></td>
+                        <td style="text-align:right">
+                            @{
+                                remain = total + Model.SalesOrder.Interest - Model.SalesOrder.Down;
+                            }
+                          <b>@remain.ToString("#,###0")</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Người bán hàng:</th>
+                        <td></td>
+                        <td></td>
+                        <th>_________________________</th>
+                      </tr>
+                       <tr>
+                        <th>@User.Identity.Name</th>
+                        <th></th>
+                        <th></th>
+                        <th>Chữ ký khách hàng</th>
+                      </tr>  
+                    </tbody>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <a class="btn btn-success btn-print" 
+            href="" onclick="window.print()">
+            <i class="glyphicon glyphicon-print"></i> In phiếu</a>
+        <a class="btn btn-primary btn-print" asp-controller="Home" asp-action="Index">
+            <i class="glyphicon glyphicon-arrow-left"></i> Trở về trang chủ</a>
+    </div>
+</div>

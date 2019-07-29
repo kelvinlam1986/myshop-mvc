@@ -39,8 +39,9 @@ namespace shop.Repositories
 
         public Payment GetPaymentBySalesID(int salesId)
         {
-            var payment = this._context.Payments.FirstOrDefault(x => x.SalesId == salesId);
+            var payment = this._context.Payments.OrderByDescending(x => x.Id).FirstOrDefault(x => x.SalesId == salesId);
             return payment;
         }
+
     }
 }

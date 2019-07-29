@@ -21,6 +21,35 @@ namespace shop.Repositories
             this._context.Sales.Add(sales);
         }
 
+        public SalesOrderPrintDTO GetSalesOrderTermPrint(int salesId)
+        {
+            var query = from s in this._context.Sales
+                        join c in this._context.Customers on s.CustomerId equals c.Id
+                        join t in this._context.Terms on s.Id equals t.SalesId
+                        where s.Id == salesId
+                        orderby s.Id descending
+                        select new SalesOrderPrintDTO
+                        {
+                            SalesId = s.Id,
+                            CustomerLastName = c.LastName,
+                            CustomerFirstName = c.FirstName,
+                            CustomerAddress = c.Address,
+                            CustomerContact = c.Contact,
+                            AmountDue = s.AmountDue,
+                            Discount = s.Discount,
+                            GrandTotal = s.Total,
+                            Tendered = s.CashTendered,
+                            Change = s.CashChange,
+                            TermName = t.TermName,
+                            PayableFor = t.PayableFor,
+                            DueDate = t.DueDate,
+                            CoMaker = c.CoMaker,
+                            Interest = t.Interest,
+                            Down = t.Down
+                        };
+            return query.FirstOrDefault();
+        }
+
         public SalesOrderPrintDTO GetSalesOrderPrint(int salesId)
         {
             var query = from s in this._context.Sales
