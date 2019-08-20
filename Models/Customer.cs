@@ -118,5 +118,13 @@ namespace shop.Models
 
         [Column(Order = 37)]
         public DateTime UpdatedDate { get; set; }
+
+        [Column(Order = 38)]
+        [Required]
+        public int BranchId { get; set; }
+
+        [ForeignKey(nameof(BranchId))]
+        [Column(Order = 39)]
+        public Branch Branch { get; set; }
     }
 }
